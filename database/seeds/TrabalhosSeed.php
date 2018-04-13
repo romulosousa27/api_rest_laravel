@@ -14,7 +14,7 @@ class TrabalhosSeed extends Seeder
     {
         Trabalho::create([
             'titulo' => str_random(10),
-            'descricao' => str_random(1000),
+            'descricao' => str_random(100),
             'local' => 'São Paulo / SP',
             'remote' => 'nao',
             'tipo' => 3,
