@@ -16,7 +16,7 @@ class CreateEmpresasTable extends Migration
         Schema::create('empresas', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nome', 100);
-            $table->string('email', 60)->unique();
+            $table->string('email', 100)->unique();
             $table->string('website');
             $table->string('logo');
             $table->string('senha', 64);
