@@ -11,6 +11,15 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(array('prefix' => 'api'), function(){
+    Route::get('/', function(){
+        return response()->json(['message' => 'Trabalhos API', 'status' => 'Conectado']);
+    });  
+
+    Route::resource('trabalhos', 'TrabalhosController');
+    Route::resource('empresas', 'EmpresasController');
+
+    Route::get('/', function(){
+        return redirect('api');
+    });
 });
