@@ -161,8 +161,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         
         //JWT Token
-        Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
-        
+        //    Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class to Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
 
     ],
 
@@ -212,11 +211,10 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        
-        //JWT
         'JWTAuth'   => Tymon\JWTAuthFacades\JWTAuth::class,
         'JWTFactory' => Tymon\JWTAuthFacades\JWTFactory::class
-
+        
+       
     ],
 
 ];
