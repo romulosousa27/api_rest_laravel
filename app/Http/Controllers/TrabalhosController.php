@@ -11,7 +11,7 @@ class TrabalhosController extends Controller
 {
 
     public function __construct(){
-        $this->middleware('auth', ['except' => ['index', 'show']]);
+        $this->middleware('jwt.auth', ['except' => ['index', 'show']]);
     }
 
     public function index(){
@@ -30,24 +30,63 @@ class TrabalhosController extends Controller
     }
 
     public function store(Request $request){
+        $dados = $request->all();
+        
+        $validador = Validator::make($dados, [
+            'titulo' => 'requeired|max:255',
+            'descricao' => 'required',
+            'local' => 'required',
+            'remoto' => 'in:sim,no',
+            'type' =>  'integer',
+        ]);
+            
+        if($validador->fails()){
+            return response()->json([
+                'message'   => 'Validação Falhou',
+                'errors'    => $validador->errors()->all()
+            ], 422);
+        }
+
         $trabalhos = new Trabalho();
-        $trabalhos->fill($request->all());
+        $trabalhos->fill($dados);
+        $trabalhos->empresa_id = \Auth::user()->id;
         $trabalhos->save();
 
         return response()->json($trabalhos, 201);
     }
 
     public function update(Request $request, $id){
-        $trabalhos = Trabalho::find($id);
+        $trabalho = Trabalho::find($id);
 
-        if(!$trabalhos){
+        if(!$trabalho){
             return response()->json(['message', 'Dados não encontrados'], 404);
         }
 
-        $trabalhos->fill($request->all());
-        $trabalhos->save();
+        
+        if(\Auth::user()->id != $trabalho->empresas_id) {
+            return response()->json([
+                'message'   => 'Você não tem permissão de mudar',
+            ], 401);
+        }
 
-        return response()->json($trabalhos);
+        $validador = Validator::make($data, [
+            'titulo' => 'max:255',
+            'remoto' => 'in:sim,NAO',
+            'tipo' => 'integer',
+        ]);
+
+        if($validador->fails()) {
+            return response()->json([
+                'message'   => 'Validação Falhou',
+                'errors'    => $validador->errors()->all()
+            ], 422);
+        }
+
+
+        $trabalho->fill($request->all());
+        $trabalho->save();
+
+        return response()->json($trabalho);
     
         /** Retorno padrão do Laravel para endpoint PUT
             public function update(Request $request, $id){
@@ -72,6 +111,12 @@ class TrabalhosController extends Controller
 
         if(!$trabalho){
             return response()->json(['message', 'Dados não encontrados'], 404);
+        }
+
+        if(\Auth::user()->id != $trabalho->empresa_id) {
+            return response()->json([
+                'message'   => 'Você não tem permissão de mudar',
+            ], 401);
         }
 
         $trabalho->delete();
