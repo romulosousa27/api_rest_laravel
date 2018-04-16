@@ -18,6 +18,7 @@ Route::group(array('prefix' => 'api'), function(){
 
     Route::resource('trabalhos', 'TrabalhosController');
     Route::resource('empresas', 'EmpresasController');
+    Route::post('auth/login', 'AuthController@autenticacao');
 
     Route::get('/', function(){
         return redirect('api');
